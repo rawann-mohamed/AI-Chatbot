@@ -1,0 +1,37 @@
+import joblib
+import re
+import nltk
+nltk.download('words')
+from nltk.corpus import words as nltk_words
+# Load the model, vectorizer, and label encoder
+best_model = joblib.load('best_model.joblib')
+count_vectorizer = joblib.load('count_vectorizer.joblib')
+label_encoder = joblib.load('label_encoder.joblib')
+def predict_user_input(user_input):
+    user_input = count_vectorizer.transform([user_input])
+    predicted_class = best_model.predict(user_input)[0]
+    predicted_value = label_encoder.inverse_transform([predicted_class])[0]
+    return predicted_value.strip()
+def is_meaningful_word(user_input):
+    words_set = set(nltk_words.words())
+    custom_words = {'icthub'}
+    combined_words = words_set.union(custom_words)
+    cleaned_input = re.sub(r'\W+', " ", user_input)
+    input_words = cleaned_input.lower().split()
+    for word in input_words:
+        if word not in combined_words:
+            input_words.remove(word)
+    return len(input_words) > 0
+def chatbot_response(user_input):
+    if not is_meaningful_word(user_input):
+        return "Please enter a meaningful word."
+    return predict_user_input(user_input)
+## main
+print("Chatbot: Hello! , type 'exit' to end the conversation.")
+while True:
+    user_input =input("\nYou: ")
+    if user_input.lower() == 'exit':
+        print("Chatbot: Goodbye!")
+        break
+    predicted_value = chatbot_response(user_input)
+    print("Chatbot:", predicted_value)

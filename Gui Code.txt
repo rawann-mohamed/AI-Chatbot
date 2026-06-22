@@ -1,0 +1,7 @@
+import gradio as gr
+
+def greet(name,age):
+    return f"Hello {name}! You are {age} years old."
+
+demo = gr.Interface(fn=chatbot_response, inputs="text", outputs="text")
+demo.launch()
