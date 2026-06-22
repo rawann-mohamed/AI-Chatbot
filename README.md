@@ -1,4 +1,4 @@
-# ICTHub FAQ Chatbot
+# FAQ Chatbot
 
 A machine learning chatbot that answers frequently asked questions about ICTHub's courses, pricing, and services. The model classifies a user's question and returns the most relevant predefined response, served through a simple Gradio web interface.
 
